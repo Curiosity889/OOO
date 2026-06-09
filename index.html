@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ausencias · notreal.tv</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-primary:#ffffff;--bg-secondary:#f7f7f5;--bg-tertiary:#f0efeb;
+  --text-primary:#1a1a18;--text-secondary:#6b6b67;--text-tertiary:#9e9e99;
+  --border-light:rgba(0,0,0,0.10);--border-mid:rgba(0,0,0,0.18);--border-strong:rgba(0,0,0,0.28);
+  --accent:#534AB7;--accent-dark:#3C3489;--radius-md:8px;--radius-lg:12px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg-primary:#1e1e1c;--bg-secondary:#282825;--bg-tertiary:#2e2e2b;
+  --text-primary:#f0efeb;--text-secondary:#a8a8a3;--text-tertiary:#6b6b67;
+  --border-light:rgba(255,255,255,0.08);--border-mid:rgba(255,255,255,0.15);--border-strong:rgba(255,255,255,0.25);
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:14px;color:var(--text-primary);background:var(--bg-tertiary);min-height:100vh}
+.app{display:flex;flex-direction:column;min-height:100vh;background:var(--bg-tertiary)}
+
+/* LOGIN */
+.login-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:20px;padding:20px}
+.login-brand{text-align:center}
+.login-brand .brand-sub{font-size:13px;color:var(--text-secondary);margin-top:4px}
+.login-card{background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);padding:32px 28px;width:100%;max-width:360px;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.login-card h2{font-size:17px;font-weight:600;margin-bottom:5px}
+.login-card p{font-size:13px;color:var(--text-secondary);margin-bottom:22px}
+
+/* CUSTOM SELECT */
+.custom-select-wrap{position:relative;margin-bottom:14px}
+.custom-select-btn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 12px;border:0.5px solid var(--border-mid);border-radius:var(--radius-md);cursor:pointer;background:var(--bg-primary);text-align:left;font-size:13px;color:var(--text-primary);transition:border-color 0.15s;font-family:inherit}
+.custom-select-btn:hover{border-color:var(--accent)}
+.custom-select-btn.open{border-color:var(--accent);border-bottom-left-radius:0;border-bottom-right-radius:0}
+.select-placeholder{color:var(--text-secondary);flex:1}
+.select-label{flex:1;font-weight:500}
+.select-chevron{margin-left:auto;font-size:15px;color:var(--text-secondary);transition:transform 0.2s;line-height:1}
+.select-chevron.open{transform:rotate(180deg)}
+.dropdown-list{position:absolute;top:100%;left:0;right:0;background:var(--bg-primary);border:0.5px solid var(--accent);border-top:none;border-bottom-left-radius:var(--radius-md);border-bottom-right-radius:var(--radius-md);z-index:100;max-height:250px;overflow-y:auto;display:none;box-shadow:0 4px 16px rgba(0,0,0,0.10)}
+.dropdown-list.open{display:block}
+.dropdown-search{padding:8px 10px;border-bottom:0.5px solid var(--border-light);position:sticky;top:0;background:var(--bg-primary)}
+.dropdown-search input{width:100%;padding:6px 9px;border:0.5px solid var(--border-mid);border-radius:var(--radius-md);font-size:12px;background:var(--bg-secondary);color:var(--text-primary);font-family:inherit}
+.dropdown-search input:focus{outline:none;border-color:var(--accent)}
+.dropdown-item{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;font-size:13px;transition:background 0.1s}
+.dropdown-item:hover{background:var(--bg-secondary)}
+.dropdown-item.hidden{display:none}
+.no-results{padding:14px 12px;font-size:13px;color:var(--text-secondary);text-align:center}
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0}
+.role-badge{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:500;margin-left:auto;white-space:nowrap}
+.badge-rrhh{background:#EEEDFE;color:#3C3489}
+.badge-cc{background:#E1F5EE;color:#085041}
+.badge-emp{background:#E6F1FB;color:#0C447C}
+.badge{font-size:11px;padding:3px 8px;border-radius:4px;font-weight:500;white-space:nowrap}
+.badge-pending{background:#FAEEDA;color:#633806}
+.badge-ok{background:#EAF3DE;color:#27500A}
+.badge-rej{background:#FCEBEB;color:#791F1F}
+
+/* BUTTONS */
+.btn-primary{width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-md);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;transition:background 0.15s}
+.btn-primary:hover{background:var(--accent-dark)}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed}
+.btn-sm{padding:7px 14px;border-radius:var(--radius-md);font-size:13px;cursor:pointer;font-weight:500;font-family:inherit;transition:all 0.15s}
+.btn-accent{background:var(--accent);color:#fff;border:none}
+.btn-accent:hover{background:var(--accent-dark)}
+.btn-ghost{background:transparent;border:0.5px solid var(--border-mid);color:var(--text-primary)}
+.btn-ghost:hover{background:var(--bg-secondary)}
+.btn-ok{background:#1D9E75;color:#fff;border:none;padding:5px 10px;border-radius:var(--radius-md);font-size:12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px}
+.btn-rej{background:#D85A30;color:#fff;border:none;padding:5px 10px;border-radius:var(--radius-md);font-size:12px;cursor:pointer;font-family:inherit}
+.login-footer{font-size:12px;color:var(--text-tertiary);text-align:center;display:flex;align-items:center;justify-content:center;gap:5px;margin-top:14px;padding-top:14px;border-top:0.5px solid var(--border-light)}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:52px;border-bottom:0.5px solid var(--border-light);background:var(--bg-primary);position:sticky;top:0;z-index:50}
+.logo{font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px;color:var(--text-primary)}
+.nav{display:flex;gap:2px}
+.nav button{background:transparent;border:none;padding:6px 12px;border-radius:var(--radius-md);cursor:pointer;font-size:13px;color:var(--text-secondary);font-family:inherit;display:flex;align-items:center;gap:6px;transition:all 0.15s}
+.nav button:hover{background:var(--bg-secondary);color:var(--text-primary)}
+.nav button.active{background:var(--bg-secondary);color:var(--text-primary);font-weight:500}
+.user-chip{display:flex;align-items:center;gap:8px}
+.user-chip .uname{font-size:13px;font-weight:500}
+.user-chip .uemail{font-size:11px;color:var(--text-secondary)}
+.btn-logout{background:transparent;border:none;cursor:pointer;color:var(--text-secondary);font-size:16px;margin-left:4px;padding:4px;border-radius:6px;display:flex;align-items:center}
+.btn-logout:hover{background:var(--bg-secondary)}
+
+/* MAIN */
+#main-screen{display:none;flex-direction:column;flex:1}
+.page{display:none;padding:24px;flex:1;max-width:920px;margin:0 auto;width:100%}
+.page.active{display:block}
+.section-title{font-size:15px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--text-primary)}
+.divider{height:0.5px;background:var(--border-light);margin:20px 0}
+
+/* DIAS COUNTER */
+.dias-counter{display:flex;align-items:center;gap:10px;background:var(--bg-secondary);border-radius:var(--radius-md);padding:10px 14px;margin-bottom:16px;font-size:13px}
+.dias-bar-wrap{flex:1;height:6px;background:var(--border-light);border-radius:3px;overflow:hidden}
+.dias-bar{height:100%;border-radius:3px;transition:width 0.4s}
+
+/* METRICS */
+.cards-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:24px}
+.metric{background:var(--bg-secondary);border-radius:var(--radius-md);padding:16px;text-align:center}
+.metric .num{font-size:26px;font-weight:700}
+.metric .lbl{font-size:12px;color:var(--text-secondary);margin-top:3px}
+
+/* FORM */
+.req-form{background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);padding:18px;margin-bottom:22px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+@media(max-width:500px){.form-row{grid-template-columns:1fr}}
+.fi label{font-size:12px;color:var(--text-secondary);display:block;margin-bottom:5px;font-weight:500}
+.fi input,.fi select{width:100%;padding:8px 10px;border:0.5px solid var(--border-mid);border-radius:var(--radius-md);font-size:13px;background:var(--bg-primary);color:var(--text-primary);font-family:inherit}
+.fi input:focus,.fi select:focus{outline:none;border-color:var(--accent)}
+
+/* EMAIL PREVIEW */
+.email-preview{background:var(--bg-secondary);border:0.5px solid var(--border-light);border-radius:var(--radius-md);padding:12px 14px;margin-bottom:12px;font-size:12px}
+.ep-header{font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.ep-row{display:flex;gap:8px;margin-bottom:4px;color:var(--text-secondary);font-size:12px}
+.ep-row span{color:var(--text-primary)}
+.ep-body{margin-top:8px;padding-top:8px;border-top:0.5px solid var(--border-light);color:var(--text-secondary);line-height:1.6}
+
+/* REQUEST CARDS */
+.req-card{background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-md);padding:13px 15px;display:flex;align-items:flex-start;gap:12px;margin-bottom:8px}
+.req-info{flex:1;min-width:0}
+.req-info .rname{font-weight:600;font-size:13px}
+.req-info .rdates{font-size:12px;color:var(--text-secondary);margin-top:3px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.req-info .rnote{font-size:12px;color:var(--text-tertiary);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.req-info .remail-note{font-size:11px;color:var(--text-tertiary);margin-top:5px;padding-top:5px;border-top:0.5px solid var(--border-light);display:flex;align-items:center;gap:4px}
+.req-actions{display:flex;gap:6px;align-items:center;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.notice-cc{background:#E1F5EE;border:0.5px solid #5DCAA5;border-radius:var(--radius-md);padding:11px 15px;margin-bottom:18px;font-size:13px;color:#085041;display:flex;align-items:center;gap:8px}
+
+/* CALENDAR */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-nav{display:flex;gap:6px}
+.cal-nav button{background:var(--bg-primary);border:0.5px solid var(--border-mid);border-radius:var(--radius-md);width:30px;height:30px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--text-primary);font-family:inherit}
+.cal-nav button:hover{background:var(--bg-secondary)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-day-name{text-align:center;font-size:11px;color:var(--text-secondary);padding:5px 0;font-weight:600}
+.cal-cell{min-height:64px;border:0.5px solid var(--border-light);border-radius:4px;padding:4px;background:var(--bg-primary);overflow:hidden}
+.cal-cell.other-month{opacity:0.30;background:var(--bg-secondary)}
+.cal-cell.today{border-color:var(--accent);border-width:1px}
+.cal-num{font-size:11px;font-weight:500;margin-bottom:2px}
+.cal-event{font-size:10px;padding:2px 5px;border-radius:3px;margin-bottom:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;display:flex;align-items:center;gap:3px;line-height:1.3}
+.cal-event-icon{font-size:10px;flex-shrink:0}
+.cal-legend{display:flex;gap:14px;margin-top:14px;flex-wrap:wrap}
+.cal-legend span{font-size:12px;display:flex;align-items:center;gap:5px}
+.legend-dot{width:10px;height:10px;border-radius:2px;display:inline-block;border:0.5px solid rgba(0,0,0,0.12)}
+.filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.filter-row select{padding:6px 10px;border:0.5px solid var(--border-mid);border-radius:var(--radius-md);font-size:12px;background:var(--bg-primary);color:var(--text-primary);font-family:inherit}
+.export-row{display:flex;gap:8px;margin:4px 0 12px;flex-wrap:wrap}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-secondary);font-size:13px}
+.empty-state i{font-size:32px;display:block;margin-bottom:10px;color:var(--text-tertiary)}
+
+/* POPUP OVERLAY */
+.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.popup-overlay.show{opacity:1;pointer-events:all}
+.popup-box{background:var(--bg-primary);border-radius:var(--radius-lg);padding:28px;max-width:360px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.18);transform:scale(0.95);transition:transform 0.2s}
+.popup-overlay.show .popup-box{transform:scale(1)}
+.popup-icon{font-size:36px;text-align:center;margin-bottom:12px}
+.popup-title{font-size:16px;font-weight:700;text-align:center;margin-bottom:8px}
+.popup-body{font-size:13px;color:var(--text-secondary);text-align:center;line-height:1.6;margin-bottom:20px}
+.popup-actions{display:flex;justify-content:center;gap:10px}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:#1D9E75;color:#fff;padding:11px 17px;border-radius:var(--radius-md);font-size:13px;z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;max-width:320px;box-shadow:0 4px 16px rgba(0,0,0,0.15)}
+.toast.show{opacity:1;transform:translateY(0)}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-mid);border-radius:3px}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+<!-- LOGIN -->
+<div id="login-screen">
+<div class="login-wrap">
+  <div class="login-brand">
+    <img src="https://notreal.tv/wp-content/uploads/2021/05/LOGO-NR.svg" alt="notreal.tv" style="height:52px;margin-bottom:4px" onerror="this.style.display='none';document.getElementById('brand-fallback').style.display='flex'"/>
+    <div id="brand-fallback" style="display:none;font-size:22px;font-weight:700;align-items:center;justify-content:center;gap:8px"><i class="ti ti-calendar-event" style="color:#534AB7"></i> notreal.tv</div>
+    <div class="brand-sub">Gestión de ausencias</div>
+  </div>
+  <div class="login-card">
+    <h2>Bienvenid@</h2>
+    <p>Seleccioná tu nombre para ingresar</p>
+    <div class="custom-select-wrap" id="select-wrap">
+      <button class="custom-select-btn" id="select-btn" onclick="toggleDropdown()" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <div class="av" id="select-av" style="display:none;width:26px;height:26px;font-size:11px"></div>
+        <span class="select-placeholder" id="select-placeholder">Seleccioná tu nombre...</span>
+        <span class="select-label" id="select-label" style="display:none"></span>
+        <i class="ti ti-chevron-down select-chevron" id="select-chevron"></i>
+      </button>
+      <div class="dropdown-list" id="dropdown-list" role="listbox">
+        <div class="dropdown-search">
+          <input type="text" id="search-input" placeholder="Buscar por nombre o mail..." oninput="filterUsers(this.value)" autocomplete="off"/>
+        </div>
+        <div id="dropdown-items"></div>
+        <div class="no-results" id="no-results" style="display:none">Sin resultados</div>
+      </div>
+    </div>
+    <button class="btn-primary" id="login-btn" onclick="doLogin()" disabled>
+      <i class="ti ti-login"></i> Ingresar
+    </button>
+    <div class="login-footer"><i class="ti ti-send"></i> Enviá tu solicitud</div>
+  </div>
+</div>
+</div>
+
+<!-- MAIN APP -->
+<div id="main-screen">
+  <div class="topbar">
+    <div class="logo">
+      <img src="https://notreal.tv/wp-content/uploads/2021/05/LOGO-NR.svg" alt="notreal.tv" style="height:28px" onerror="this.outerHTML='<i class=\'ti ti-calendar-event\' style=\'color:#534AB7\'></i>'"/>
+      <span style="font-size:12px;color:var(--text-secondary);font-weight:400;margin-left:4px">Ausencias</span>
+    </div>
+    <div class="nav">
+      <button class="active" onclick="showPage('mis-ausencias',this)"><i class="ti ti-user"></i> <span>Mis ausencias</span></button>
+      <button onclick="showPage('calendario',this)"><i class="ti ti-calendar"></i> <span>Calendario</span></button>
+      <button id="btn-rrhh" onclick="showPage('rrhh',this)" style="display:none"><i class="ti ti-shield-check"></i> <span>Aprobaciones</span></button>
+      <button onclick="showPage('equipo',this)"><i class="ti ti-users"></i> <span>Equipo</span></button>
+    </div>
+    <div class="user-chip">
+      <div class="av" id="top-avatar" style="width:30px;height:30px;font-size:11px"></div>
+      <div><div class="uname" id="top-name"></div><div class="uemail" id="top-email"></div></div>
+      <button class="btn-logout" onclick="logout()" title="Cerrar sesión"><i class="ti ti-logout"></i></button>
+    </div>
+  </div>
+
+  <!-- MIS AUSENCIAS -->
+  <div class="page active" id="page-mis-ausencias">
+    <div class="notice-cc" id="cc-notice" style="display:none">
+      <i class="ti ti-mail-check" style="font-size:18px;flex-shrink:0"></i>
+      Tu rol es <strong>observadora en copia</strong>. Recibís notificaciones de cada solicitud y aprobación, pero no podés crear ausencias propias.
+    </div>
+    <div id="form-section">
+      <div class="section-title"><i class="ti ti-plus-circle" style="color:#534AB7"></i> Nueva solicitud</div>
+
+      <!-- CONTADOR DÍAS -->
+      <div class="dias-counter" id="dias-counter" style="display:none">
+        <i class="ti ti-sun" style="font-size:16px;color:var(--accent)"></i>
+        <span style="font-weight:600" id="dias-used">0</span><span style="color:var(--text-secondary)">/ 14 días usados este año</span>
+        <div class="dias-bar-wrap"><div class="dias-bar" id="dias-bar" style="width:0%;background:var(--accent)"></div></div>
+        <span style="font-size:12px;color:var(--text-secondary)" id="dias-rest">14 disponibles</span>
+      </div>
+
+      <div class="req-form">
+        <div class="form-row">
+          <div class="fi"><label>Tipo de ausencia</label>
+            <select id="tipo-ausencia" onchange="updatePreview();toggleHoraField()">
+              <option value="vacaciones">🌴 Vacaciones</option>
+              <option value="medico">💊 Médico / Enfermedad</option>
+              <option value="tarde">⏰ Llegada tarde</option>
+              <option value="personal">📋 Personal</option>
+              <option value="viaje">✈️ Viaje (vuelo/tren)</option>
+            </select>
+          </div>
+          <div class="fi"><label>Fecha desde</label><input type="date" id="fecha-desde" onchange="updatePreview();updateDiasCounter()"/></div>
+        </div>
+        <div class="form-row">
+          <div class="fi"><label>Fecha hasta</label><input type="date" id="fecha-hasta" onchange="updatePreview();updateDiasCounter()"/></div>
+          <div class="fi" id="hora-field" style="display:none"><label>Hora del evento</label><input type="time" id="hora-evento" onchange="updatePreview()"/></div>
+        </div>
+        <div class="form-row">
+          <div class="fi" style="grid-column:1/-1"><label>Motivo (opcional)</label><input id="motivo" placeholder="Breve descripción" oninput="updatePreview()"/></div>
+        </div>
+        <div id="email-preview-section"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;flex-wrap:wrap;gap:8px">
+          <span style="font-size:11px;color:var(--text-secondary);display:flex;align-items:center;gap:4px">
+            <i class="ti ti-mail" style="font-size:12px"></i> Notifica a eugenia@notreal.tv · CC producers@notreal.tv
+          </span>
+          <div style="display:flex;gap:8px">
+            <button class="btn-sm btn-ghost" onclick="clearForm()">Cancelar</button>
+            <button class="btn-sm btn-accent" onclick="submitRequest()"><i class="ti ti-send"></i> Enviar solicitud</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-title"><i class="ti ti-list" style="color:#534AB7"></i> Mis solicitudes</div>
+    <div id="my-requests-list"></div>
+  </div>
+
+  <!-- CALENDARIO -->
+  <div class="page" id="page-calendario">
+    <div class="cal-header">
+      <div style="font-size:16px;font-weight:600" id="cal-month-label"></div>
+      <div class="cal-nav">
+        <button onclick="changeMonth(-1)"><i class="ti ti-chevron-left"></i></button>
+        <button onclick="changeMonth(1)"><i class="ti ti-chevron-right"></i></button>
+      </div>
+    </div>
+    <div class="filter-row">
+      <select id="cal-filter-estado" onchange="renderCalendar()">
+        <option value="">Todos los estados</option>
+        <option value="aprobado">Solo aprobados</option>
+        <option value="pendiente">Solo pendientes</option>
+      </select>
+      <select id="cal-filter-tipo" onchange="renderCalendar()">
+        <option value="">Todos los tipos</option>
+        <option value="vacaciones">🌴 Vacaciones</option>
+        <option value="medico">💊 Médico</option>
+        <option value="tarde">⏰ Tarde</option>
+        <option value="viaje">✈️ Viaje</option>
+        <option value="personal">📋 Personal</option>
+      </select>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div class="cal-legend">
+      <span><span class="legend-dot" style="background:#EEEDFE"></span>🌴 Vacaciones</span>
+      <span><span class="legend-dot" style="background:#E1F5EE"></span>💊 Médico</span>
+      <span><span class="legend-dot" style="background:#FAEEDA"></span>⏰ Tarde / Viaje</span>
+      <span><span class="legend-dot" style="background:#E6F1FB"></span>📋 Personal</span>
+      <span><span class="legend-dot" style="background:#F5F5F5;border:1px dashed #aaa"></span>Pendiente aprobación</span>
+    </div>
+  </div>
+
+  <!-- APROBACIONES RRHH -->
+  <div class="page" id="page-rrhh">
+    <div class="cards-row" id="rrhh-metrics"></div>
+    <div class="section-title"><i class="ti ti-clock-check" style="color:#534AB7"></i> Solicitudes pendientes de aprobación</div>
+    <div id="pending-list"></div>
+    <div class="divider"></div>
+    <div class="section-title"><i class="ti ti-history" style="color:#534AB7"></i> Historial completo</div>
+    <div class="filter-row">
+      <select id="rrhh-filter-estado" onchange="renderRRHH()">
+        <option value="">Todos los estados</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="aprobado">Aprobado</option>
+        <option value="rechazado">Rechazado</option>
+      </select>
+    </div>
+    <div id="all-requests-list"></div>
+    <div class="divider"></div>
+    <div class="export-row">
+      <button class="btn-sm btn-ghost" onclick="exportCSV()"><i class="ti ti-table-export"></i> Exportar Spreadsheet (.csv)</button>
+      <button class="btn-sm btn-ghost" onclick="exportICS()"><i class="ti ti-calendar-plus"></i> Exportar Google Calendar (.ics)</button>
+    </div>
+  </div>
+
+  <!-- EQUIPO -->
+  <div class="page" id="page-equipo">
+    <div class="section-title"><i class="ti ti-users" style="color:#534AB7"></i> Estado del equipo hoy</div>
+    <div id="team-list"></div>
+    <div class="divider"></div>
+    <div class="export-row">
+      <button class="btn-sm btn-ghost" onclick="exportCSV()"><i class="ti ti-table-export"></i> Exportar Spreadsheet (.csv)</button>
+      <button class="btn-sm btn-ghost" onclick="exportICS()"><i class="ti ti-calendar-plus"></i> Exportar Google Calendar (.ics)</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- POPUP DÍAS EXCEDIDOS -->
+<div class="popup-overlay" id="popup-dias">
+  <div class="popup-box">
+    <div class="popup-icon">⚠️</div>
+    <div class="popup-title">Excede la cantidad de días</div>
+    <div class="popup-body" id="popup-dias-body">Esta solicitud supera los 14 días de vacaciones disponibles por año.</div>
+    <div class="popup-actions">
+      <button class="btn-sm btn-ghost" onclick="closePopup('popup-dias')">Cancelar</button>
+      <button class="btn-sm btn-accent" onclick="submitForce()">Enviar igual</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const COLORS={
+  vacaciones:['#EEEDFE','#3C3489'],
+  medico:['#E1F5EE','#085041'],
+  tarde:['#FAEEDA','#633806'],
+  viaje:['#FAEEDA','#633806'],
+  personal:['#E6F1FB','#0C447C']
+};
+const TIPO_ICON={vacaciones:'🌴',medico:'💊',tarde:'⏰',viaje:'✈️',personal:'📋'};
+const TIPO_LABEL={vacaciones:'Vacaciones',medico:'Médico / Enfermedad',tarde:'Llegada tarde',viaje:'Viaje (vuelo/tren)',personal:'Personal'};
+const MAX_DIAS_ANIO=14;
+
+const AV_PALETTES=[
+  {bg:'#EEEDFE',fg:'#3C3489'},{bg:'#E1F5EE',fg:'#085041'},{bg:'#FAEEDA',fg:'#633806'},
+  {bg:'#E6F1FB',fg:'#0C447C'},{bg:'#FAECE7',fg:'#712B13'},{bg:'#FBEAF0',fg:'#72243E'},
+  {bg:'#EAF3DE',fg:'#27500A'},{bg:'#F1EFE8',fg:'#5F5E5A'}
+];
+
+const USERS=[
+  {id:'valeria',  name:'Valeria Moreiro',         email:'valeria@notreal.tv',  role:'empleado', jobTitle:'ECD, Partner',                              location:'España'},
+  {id:'milton',   name:'Milton Gonzalez',          email:'milton@notreal.tv',   role:'empleado', jobTitle:'ECD, Partner',                              location:'España'},
+  {id:'roberto',  name:'Roberto Connolly',         email:'roberto@notreal.tv',  role:'empleado', jobTitle:'COO, Lead EP, Partner',                     location:'Argentina'},
+  {id:'eugenia',  name:'Eugenia García Montaldo',  email:'eugenia@notreal.tv',  role:'rrhh',     jobTitle:'Admin, RRHH, Partner',                      location:'Argentina'},
+  {id:'lari',     name:'Lari Miranda',             email:'lari@notreal.tv',     role:'empleado', jobTitle:'EP, Newbiz',                                location:'Alemania'},
+  {id:'mserrano', name:'Mechi Serrano',            email:'mserrano@notreal.tv', role:'empleado', jobTitle:'Head of Production',                        location:'España'},
+  {id:'mechi',    name:'Mechi Ginzo',              email:'mechi@notreal.tv',    role:'empleado', jobTitle:'Creative Director',                         location:'Argentina'},
+  {id:'lu',       name:'Luján Borzi',              email:'lu@notreal.tv',       role:'empleado', jobTitle:'Art Director, Creative Lead',                location:'España'},
+  {id:'maca',     name:'Maca Mosquera',            email:'maca@notreal.tv',     role:'empleado', jobTitle:'Anim Director, Creative Lead',               location:'España'},
+  {id:'nico',     name:'Nico Martinetti',          email:'nico@notreal.tv',     role:'empleado', jobTitle:'Art Director',                              location:'Argentina'},
+  {id:'alex',     name:'Alex Mellado',             email:'alex@notreal.tv',     role:'empleado', jobTitle:'Lead Animator',                             location:'España'},
+  {id:'martin',   name:'Martín Orza',              email:'martin@notreal.tv',   role:'empleado', jobTitle:'Creative Project Manager',                  location:'Argentina'},
+  {id:'naty',     name:'Naty Lara',                email:'naty@notreal.tv',     role:'empleado', jobTitle:'Creative Project Manager, Creative Lead',    location:'España'},
+  {id:'vitor',    name:'Vitor Teixeira',           email:'vitor@notreal.tv',    role:'empleado', jobTitle:'3D Designer, AI Specialist, Technical Lead', location:'Portugal'},
+  {id:'flor',     name:'Florencia Tasso',          email:'flor@notreal.tv',     role:'empleado', jobTitle:'3D Designer',                               location:'Argentina'},
+  {id:'julie',    name:'Julie Maubé',              email:'julie@notreal.tv',    role:'empleado', jobTitle:'2D/3D Animator',                            location:'España'},
+  {id:'eva',      name:'Eva Amuchastegui',         email:'eva@notreal.tv',      role:'empleado', jobTitle:'Producer',                                  location:'Argentina'},
+];
+
+const ROLE_LABELS={empleado:'Empleado',rrhh:'RRHH, Partner'};
+const ROLE_BADGE={empleado:'badge-emp',rrhh:'badge-rrhh'};
+let currentUser=null,selectedUserId=null;
+let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
+let pendingSubmitData=null;
+const DB_KEY='ausencias_notreal_v2';
+
+function loadData(){try{const d=localStorage.getItem(DB_KEY);return d?JSON.parse(d):[];}catch{return[];}}
+function saveData(d){try{localStorage.setItem(DB_KEY,JSON.stringify(d));}catch{}}
+function getPalette(uid){const i=USERS.findIndex(u=>u.id===uid);return AV_PALETTES[Math.max(0,i)%AV_PALETTES.length];}
+function getAv(name){return(name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);}
+function countDias(desde,hasta){return Math.max(1,Math.ceil((new Date(hasta)-new Date(desde))/86400000)+1);}
+
+function formatDate(d){
+  if(!d)return'';
+  const[y,m,day]=d.split('-');
+  const months=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return`${parseInt(day)} ${months[parseInt(m)-1]} ${y}`;
+}
+function toast(msg,color='#1D9E75'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.background=color;
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3400);
+}
+function openPopup(id){document.getElementById(id).classList.add('show');}
+function closePopup(id){document.getElementById(id).classList.remove('show');}
+
+// ── DÍAS USADOS ──
+function getDiasUsadosAnio(uid,excludeId){
+  const anio=new Date().getFullYear();
+  return loadData()
+    .filter(r=>r.userId===uid&&r.tipo==='vacaciones'&&r.estado!=='rechazado'&&r.id!==excludeId&&r.desde&&r.desde.startsWith(anio))
+    .reduce((acc,r)=>acc+countDias(r.desde,r.hasta),0);
+}
+
+function updateDiasCounter(){
+  if(!currentUser)return;
+  const counter=document.getElementById('dias-counter');
+  const tipo=document.getElementById('tipo-ausencia').value;
+  if(tipo!=='vacaciones'){counter.style.display='none';return;}
+  counter.style.display='flex';
+  const usados=getDiasUsadosAnio(currentUser.id,null);
+  const desde=document.getElementById('fecha-desde').value;
+  const hasta=document.getElementById('fecha-hasta').value;
+  const enForm=(desde&&hasta&&desde<=hasta)?countDias(desde,hasta):0;
+  const total=usados+enForm;
+  const pct=Math.min(100,(total/MAX_DIAS_ANIO)*100);
+  document.getElementById('dias-used').textContent=total;
+  document.getElementById('dias-rest').textContent=`${Math.max(0,MAX_DIAS_ANIO-total)} disponibles`;
+  const bar=document.getElementById('dias-bar');
+  bar.style.width=pct+'%';
+  bar.style.background=total>MAX_DIAS_ANIO?'#D85A30':total===MAX_DIAS_ANIO?'#EF9F27':'var(--accent)';
+}
+
+// ── HORA FIELD ──
+function toggleHoraField(){
+  const tipo=document.getElementById('tipo-ausencia').value;
+  const show=tipo==='viaje'||tipo==='tarde';
+  document.getElementById('hora-field').style.display=show?'block':'none';
+  updateDiasCounter();
+}
+
+// ── LOGIN ──
+function buildDropdownItems(){
+  const container=document.getElementById('dropdown-items');
+  container.innerHTML=USERS.map(u=>{
+    const p=getPalette(u.id);
+    const locFlag={España:'🇪🇸',Argentina:'🇦🇷',Alemania:'🇩🇪',Portugal:'🇵🇹'}[u.location]||'🌍';
+    return`<div class="dropdown-item" data-id="${u.id}" onclick="selectUser('${u.id}')" role="option">
+      <div class="av" style="background:${p.bg};color:${p.fg};width:30px;height:30px;font-size:11px">${getAv(u.name)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:13px">${u.name}</div>
+        <div style="font-size:11px;color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.jobTitle||''} · ${locFlag} ${u.location||''}</div>
+      </div>
+      <span class="role-badge ${ROLE_BADGE[u.role]||'badge-emp'}">${ROLE_LABELS[u.role]||'Empleado'}</span>
+    </div>`;
+  }).join('');
+}
+function toggleDropdown(){
+  const list=document.getElementById('dropdown-list'),chevron=document.getElementById('select-chevron'),btn=document.getElementById('select-btn');
+  const isOpen=list.classList.contains('open');
+  list.classList.toggle('open',!isOpen);chevron.classList.toggle('open',!isOpen);btn.classList.toggle('open',!isOpen);
+  btn.setAttribute('aria-expanded',String(!isOpen));
+  if(!isOpen)setTimeout(()=>document.getElementById('search-input').focus(),60);
+}
+function filterUsers(q){
+  const items=document.querySelectorAll('.dropdown-item'),lower=q.toLowerCase();
+  let visible=0;
+  items.forEach(item=>{
+    const u=USERS.find(x=>x.id===item.dataset.id);
+    const match=!q||(u.name.toLowerCase().includes(lower)||u.email.toLowerCase().includes(lower));
+    item.classList.toggle('hidden',!match);if(match)visible++;
+  });
+  document.getElementById('no-results').style.display=visible===0?'block':'none';
+}
+function selectUser(uid){
+  selectedUserId=uid;
+  const u=USERS.find(x=>x.id===uid),p=getPalette(uid);
+  const avEl=document.getElementById('select-av');
+  avEl.style.cssText=`display:flex;width:26px;height:26px;font-size:11px;background:${p.bg};color:${p.fg}`;
+  avEl.textContent=getAv(u.name);
+  document.getElementById('select-placeholder').style.display='none';
+  const lbl=document.getElementById('select-label');lbl.style.display='block';lbl.textContent=u.name+' · '+u.email;
+  document.getElementById('dropdown-list').classList.remove('open');
+  document.getElementById('select-chevron').classList.remove('open');
+  document.getElementById('select-btn').classList.remove('open');
+  document.getElementById('select-btn').setAttribute('aria-expanded','false');
+  document.getElementById('login-btn').disabled=false;
+  document.getElementById('search-input').value='';filterUsers('');
+}
+document.addEventListener('click',function(e){
+  const wrap=document.getElementById('select-wrap');
+  if(wrap&&!wrap.contains(e.target)){
+    ['dropdown-list','select-chevron','select-btn'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el){el.classList.remove('open');if(id==='select-btn')el.setAttribute('aria-expanded','false');}
+    });
+  }
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')['dropdown-list','select-chevron','select-btn'].forEach(id=>document.getElementById(id)?.classList.remove('open'));});
+function doLogin(){if(!selectedUserId)return;currentUser=USERS.find(u=>u.id===selectedUserId);enterApp();}
+function enterApp(){
+  document.getElementById('login-screen').style.display='none';
+  const ms=document.getElementById('main-screen');ms.style.display='flex';ms.style.flexDirection='column';ms.style.flex='1';
+  const p=getPalette(currentUser.id),topAv=document.getElementById('top-avatar');
+  topAv.textContent=getAv(currentUser.name);topAv.style.background=p.bg;topAv.style.color=p.fg;
+  document.getElementById('top-name').textContent=currentUser.name;
+  document.getElementById('top-email').textContent=currentUser.email;
+  document.getElementById('btn-rrhh').style.display=currentUser.role==='rrhh'?'flex':'none';
+  document.getElementById('cc-notice').style.display=currentUser.role==='cc'?'flex':'none';
+  document.getElementById('form-section').style.display=currentUser.role==='cc'?'none':'block';
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('fecha-desde').value=today;
+  document.getElementById('fecha-hasta').value=today;
+  showPage('mis-ausencias',document.querySelector('.nav button'));
+  renderMyRequests();updateDiasCounter();
+}
+function logout(){
+  currentUser=null;selectedUserId=null;
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('main-screen').style.display='none';
+  document.getElementById('select-placeholder').style.display='block';
+  document.getElementById('select-label').style.display='none';
+  document.getElementById('select-av').style.display='none';
+  document.getElementById('login-btn').disabled=true;
+  document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active',i===0));
+  document.querySelectorAll('.page').forEach((p,i)=>p.classList.toggle('active',i===0));
+}
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(id==='calendario')renderCalendar();
+  else if(id==='rrhh')renderRRHH();
+  else if(id==='equipo')renderTeam();
+  else if(id==='mis-ausencias'){renderMyRequests();updateDiasCounter();}
+}
+
+// ── FORM ──
+function updatePreview(){
+  if(!currentUser||currentUser.role==='cc')return;
+  const tipo=document.getElementById('tipo-ausencia').value;
+  const desde=document.getElementById('fecha-desde').value;
+  const hasta=document.getElementById('fecha-hasta').value;
+  const motivo=document.getElementById('motivo').value;
+  const hora=document.getElementById('hora-evento').value;
+  const sec=document.getElementById('email-preview-section');
+  if(!desde||!hasta){sec.innerHTML='';return;}
+  const horaStr=hora?` · Hora: ${hora}`:'';
+  sec.innerHTML=`<div class="email-preview">
+    <div class="ep-header"><i class="ti ti-mail" style="font-size:13px"></i> Vista previa del mail que se enviará</div>
+    <div class="ep-row"><span style="min-width:38px;flex-shrink:0">Para:</span><span>eugenia@notreal.tv</span></div>
+    <div class="ep-row"><span style="min-width:38px;flex-shrink:0">CC:</span><span>producers@notreal.tv</span></div>
+    <div class="ep-row"><span style="min-width:38px;flex-shrink:0">Asunto:</span><span>${TIPO_ICON[tipo]} Solicitud de ${TIPO_LABEL[tipo]||tipo} — ${currentUser.name}</span></div>
+    <div class="ep-body">Hola Eugenia,<br><br>${currentUser.name} solicita ${TIPO_LABEL[tipo]||tipo} del <strong>${formatDate(desde)}</strong> al <strong>${formatDate(hasta)}</strong>${horaStr}.${motivo?'<br>Motivo: '+motivo:''}<br><br>Por favor revisá la solicitud en la plataforma.</div>
+  </div>`;
+}
+
+function clearForm(){
+  document.getElementById('tipo-ausencia').value='vacaciones';
+  document.getElementById('motivo').value='';
+  document.getElementById('hora-evento').value='';
+  document.getElementById('hora-field').style.display='none';
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('fecha-desde').value=today;
+  document.getElementById('fecha-hasta').value=today;
+  document.getElementById('email-preview-section').innerHTML='';
+  updateDiasCounter();
+}
+
+function buildReqData(){
+  return{
+    id:'req_'+Date.now(),
+    userId:currentUser.id,userName:currentUser.name,userEmail:currentUser.email,
+    tipo:document.getElementById('tipo-ausencia').value,
+    desde:document.getElementById('fecha-desde').value,
+    hasta:document.getElementById('fecha-hasta').value,
+    hora:document.getElementById('hora-evento').value||null,
+    motivo:document.getElementById('motivo').value,
+    estado:'pendiente',
+    fechaSolicitud:new Date().toISOString().split('T')[0]
+  };
+}
+
+function submitRequest(){
+  const desde=document.getElementById('fecha-desde').value;
+  const hasta=document.getElementById('fecha-hasta').value;
+  const tipo=document.getElementById('tipo-ausencia').value;
+  if(!desde||!hasta){toast('Completá las fechas','#D85A30');return;}
+  if(desde>hasta){toast('La fecha desde debe ser anterior a la fecha hasta','#D85A30');return;}
+  // Validar días de vacaciones
+  if(tipo==='vacaciones'){
+    const diasUsados=getDiasUsadosAnio(currentUser.id,null);
+    const diasEsta=countDias(desde,hasta);
+    if(diasUsados+diasEsta>MAX_DIAS_ANIO){
+      pendingSubmitData=buildReqData();
+      document.getElementById('popup-dias-body').innerHTML=
+        `Esta solicitud suma <strong>${diasEsta} días</strong>. Ya usaste <strong>${diasUsados}</strong> de tus 14 días anuales.<br>Superás el límite por <strong>${diasUsados+diasEsta-MAX_DIAS_ANIO} día${diasUsados+diasEsta-MAX_DIAS_ANIO!==1?'s':''}</strong>.`;
+      openPopup('popup-dias');
+      return;
+    }
+  }
+  doSubmit(buildReqData());
+}
+
+function submitForce(){
+  closePopup('popup-dias');
+  if(pendingSubmitData){doSubmit(pendingSubmitData);pendingSubmitData=null;}
+}
+
+function doSubmit(req){
+  const data=loadData();
+  data.push(req);
+  saveData(data);
+  clearForm();
+  toast(`${TIPO_ICON[req.tipo]} Solicitud enviada — Eugenia recibirá el mail (CC: producers@notreal.tv)`);
+  renderMyRequests();updateDiasCounter();
+}
+
+// ── CARDS ──
+function reqCard(r,canApprove){
+  const u=USERS.find(x=>x.id===r.userId)||{id:'x',name:r.userName||'?',email:''};
+  const p=getPalette(u.id);
+  const badges={pendiente:'badge-pending',aprobado:'badge-ok',rechazado:'badge-rej'};
+  const stateLabels={pendiente:'Pendiente aprobación',aprobado:'Aprobado por RRHH',rechazado:'Rechazado'};
+  const dias=countDias(r.desde,r.hasta);
+  const icon=TIPO_ICON[r.tipo]||'📋';
+  const label=TIPO_LABEL[r.tipo]||r.tipo;
+  const horaStr=r.hora?` · <i class="ti ti-clock" style="font-size:11px"></i> ${r.hora}`:'';
+  return`<div class="req-card">
+    <div style="font-size:22px;width:36px;text-align:center;flex-shrink:0;padding-top:2px">${icon}</div>
+    <div class="req-info">
+      <div class="rname">${r.userName} <span style="font-weight:400;color:var(--text-secondary)">— ${label}</span></div>
+      <div class="rdates"><i class="ti ti-calendar" style="font-size:12px"></i> ${formatDate(r.desde)} → ${formatDate(r.hasta)} · ${dias} día${dias!==1?'s':''}${horaStr}</div>
+      ${r.motivo?`<div class="rnote"><i class="ti ti-message" style="font-size:11px"></i> ${r.motivo}</div>`:''}
+      <div class="remail-note"><i class="ti ti-mail" style="font-size:11px"></i> eugenia@notreal.tv · CC: producers@notreal.tv</div>
+    </div>
+    <div class="req-actions">
+      <span class="badge ${badges[r.estado]||'badge-pending'}">${stateLabels[r.estado]||r.estado}</span>
+      ${canApprove&&r.estado==='pendiente'
+        ?`<button class="btn-ok" onclick="approve('${r.id}')"><i class="ti ti-check"></i> Aprobar</button>
+           <button class="btn-rej" onclick="reject('${r.id}')" title="Rechazar"><i class="ti ti-x"></i></button>`
+        :''}
+    </div>
+  </div>`;
+}
+
+function renderMyRequests(){
+  const data=loadData();
+  const mine=data.filter(r=>r.userId===currentUser.id).reverse();
+  document.getElementById('my-requests-list').innerHTML=mine.length
+    ?mine.map(r=>reqCard(r,false)).join('')
+    :`<div class="empty-state"><i class="ti ti-inbox"></i>No tenés solicitudes aún</div>`;
+}
+
+function approve(id){
+  const data=loadData(),r=data.find(x=>x.id===id);
+  if(r){r.estado='aprobado';r.aprobadoPor='eugenia@notreal.tv';}
+  saveData(data);
+  toast('✓ Solicitud aprobada — se notifica a '+r.userEmail+' (CC: producers@notreal.tv)');
+  renderRRHH();
+}
+function reject(id){
+  const data=loadData(),r=data.find(x=>x.id===id);
+  if(r){r.estado='rechazado';r.aprobadoPor='eugenia@notreal.tv';}
+  saveData(data);
+  toast('Solicitud rechazada — se notifica a '+r.userEmail+' (CC: producers@notreal.tv)','#D85A30');
+  renderRRHH();
+}
+function renderRRHH(){
+  const data=loadData(),pending=data.filter(r=>r.estado==='pendiente');
+  document.getElementById('pending-list').innerHTML=pending.length
+    ?pending.map(r=>reqCard(r,true)).join('')
+    :`<div class="empty-state"><i class="ti ti-checks"></i>Sin solicitudes pendientes</div>`;
+  const fe=document.getElementById('rrhh-filter-estado')?.value||'';
+  let all=[...data].reverse();
+  if(fe)all=all.filter(r=>r.estado===fe);
+  document.getElementById('all-requests-list').innerHTML=all.length
+    ?all.map(r=>reqCard(r,true)).join('')
+    :`<div class="empty-state" style="padding:20px">Sin resultados</div>`;
+  document.getElementById('rrhh-metrics').innerHTML=`
+    <div class="metric"><div class="num">${data.length}</div><div class="lbl">Total</div></div>
+    <div class="metric"><div class="num">${pending.length}</div><div class="lbl">Pendientes</div></div>
+    <div class="metric"><div class="num">${data.filter(r=>r.estado==='aprobado').length}</div><div class="lbl">Aprobadas</div></div>
+    <div class="metric"><div class="num">${data.filter(r=>r.estado==='rechazado').length}</div><div class="lbl">Rechazadas</div></div>`;
+}
+
+// ── CALENDARIO ──
+function renderCalendar(){
+  const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  document.getElementById('cal-month-label').textContent=`${months[calMonth]} ${calYear}`;
+  const data=loadData();
+  const ft=document.getElementById('cal-filter-tipo')?.value||'';
+  const fe=document.getElementById('cal-filter-estado')?.value||'';
+  // Show pendientes + aprobados in calendar
+  let reqs=data.filter(r=>r.estado==='aprobado'||r.estado==='pendiente');
+  if(ft)reqs=reqs.filter(r=>r.tipo===ft);
+  if(fe)reqs=reqs.filter(r=>r.estado===fe);
+  const firstDay=new Date(calYear,calMonth,1),lastDay=new Date(calYear,calMonth+1,0);
+  const startDow=(firstDay.getDay()+6)%7,today=new Date();
+  let html=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(d=>`<div class="cal-day-name">${d}</div>`).join('');
+  for(let i=0;i<startDow;i++){
+    const pd=new Date(calYear,calMonth,1-startDow+i);
+    html+=`<div class="cal-cell other-month"><div class="cal-num">${pd.getDate()}</div></div>`;
+  }
+  for(let d=1;d<=lastDay.getDate();d++){
+    const ds=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===d;
+    const events=reqs.filter(r=>ds>=r.desde&&ds<=r.hasta);
+    const evHtml=events.slice(0,3).map(r=>{
+      const isPending=r.estado==='pendiente';
+      const col=isPending?['#F5F5F5','#888888']:COLORS[r.tipo]||COLORS.personal;
+      const u=USERS.find(x=>x.id===r.userId);
+      const icon=TIPO_ICON[r.tipo]||'📋';
+      const borderStyle=isPending?'border:1px dashed #bbb;':'';
+      return`<div class="cal-event" style="background:${col[0]};color:${col[1]};${borderStyle}" title="${u?.name||'?'} — ${TIPO_LABEL[r.tipo]||r.tipo}${isPending?' (pendiente aprobación)':' (aprobado)'}${r.hora?' · '+r.hora:''}">
+        <span class="cal-event-icon">${icon}</span>${getAv(u?.name||'?')}${r.hora?` ${r.hora}`:''}
+      </div>`;
+    }).join('');
+    const more=events.length>3?`<div style="font-size:9px;color:var(--text-secondary)">+${events.length-3}</div>`:'';
+    html+=`<div class="cal-cell${isToday?' today':''}">
+      <div class="cal-num" style="${isToday?'color:var(--accent);font-weight:700':''}">${d}</div>
+      ${evHtml}${more}
+    </div>`;
+  }
+  const rem=(7-((startDow+lastDay.getDate())%7))%7;
+  for(let i=1;i<=rem;i++)html+=`<div class="cal-cell other-month"><div class="cal-num">${i}</div></div>`;
+  document.getElementById('cal-grid').innerHTML=html;
+}
+function changeMonth(d){
+  calMonth+=d;
+  if(calMonth>11){calMonth=0;calYear++;}
+  if(calMonth<0){calMonth=11;calYear--;}
+  renderCalendar();
+}
+
+// ── EQUIPO ──
+function renderTeam(){
+  const data=loadData(),today=new Date().toISOString().split('T')[0];
+  document.getElementById('team-list').innerHTML=USERS.map(u=>{
+    const p=getPalette(u.id);
+    const locFlag={España:'🇪🇸',Argentina:'🇦🇷',Alemania:'🇩🇪',Portugal:'🇵🇹'}[u.location]||'🌍';
+    const ausente=data.find(r=>r.userId===u.id&&r.estado==='aprobado'&&today>=r.desde&&today<=r.hasta);
+    const proxima=data.filter(r=>r.userId===u.id&&r.estado==='aprobado'&&r.desde>today).sort((a,b)=>a.desde.localeCompare(b.desde))[0];
+    return`<div class="req-card">
+      <div class="av" style="background:${p.bg};color:${p.fg};width:36px;height:36px;font-size:12px;flex-shrink:0">${getAv(u.name)}</div>
+      <div class="req-info">
+        <div class="rname">${u.name} <span style="font-weight:400;font-size:12px;color:var(--text-secondary)">${locFlag} ${u.location||''}</span></div>
+        <div class="rdates" style="color:var(--text-tertiary);font-size:11px">${u.jobTitle||''}</div>
+        <div class="rdates" style="margin-top:3px">${ausente?`${TIPO_ICON[ausente.tipo]||'📋'} Ausente hasta ${formatDate(ausente.hasta)} — ${TIPO_LABEL[ausente.tipo]||ausente.tipo}`:'✅ Presente hoy'}</div>
+        ${proxima?`<div class="rnote">Próxima: ${formatDate(proxima.desde)} ${TIPO_ICON[proxima.tipo]||''}</div>`:''}
+      </div>
+      <span class="role-badge ${ROLE_BADGE[u.role]||'badge-emp'}">${ROLE_LABELS[u.role]||'Empleado'}</span>
+      <span class="badge ${ausente?'badge-pending':'badge-ok'}" style="margin-left:6px">${ausente?'Ausente':'Presente'}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── EXPORT ──
+function exportCSV(){
+  const data=loadData();
+  if(!data.length){toast('No hay datos para exportar','#D85A30');return;}
+  const estados={pendiente:'Pendiente',aprobado:'Aprobado por RRHH',rechazado:'Rechazado'};
+  const rows=[['Empleado','Email','Tipo','Desde','Hasta','Hora','Días','Motivo','Estado','Fecha solicitud','Aprobado por']];
+  data.forEach(r=>{
+    const dias=countDias(r.desde,r.hasta);
+    rows.push([r.userName,r.userEmail||'',TIPO_LABEL[r.tipo]||r.tipo,r.desde,r.hasta,r.hora||'',dias,r.motivo||'',estados[r.estado]||r.estado,r.fechaSolicitud||'',r.aprobadoPor||'']);
+  });
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='ausencias_notreal_'+new Date().toISOString().split('T')[0]+'.csv';a.click();
+  toast('✓ CSV descargado — abrilo en Google Sheets o Excel');
+}
+function exportICS(){
+  const data=loadData(),aprobadas=data.filter(r=>r.estado==='aprobado');
+  if(!aprobadas.length){toast('No hay ausencias aprobadas para exportar','#D85A30');return;}
+  let ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//AusenciasNotreal//ES\r\nCALSCALE:GREGORIAN\r\nX-WR-CALNAME:Ausencias notreal.tv\r\n';
+  aprobadas.forEach(r=>{
+    let dtstart,dtend;
+    if(r.hora){
+      dtstart=r.desde.replace(/-/g,'')+'T'+r.hora.replace(':','')+'00';
+      dtend=r.hasta.replace(/-/g,'')+'T'+r.hora.replace(':','')+'00';
+      ics+=`BEGIN:VEVENT\r\nUID:aus_${r.id}@notreal.tv\r\nSUMMARY:${TIPO_ICON[r.tipo]} ${r.userName} — ${TIPO_LABEL[r.tipo]||r.tipo}\r\nDTSTART:${dtstart}\r\nDTEND:${dtend}\r\nDESCRIPTION:${r.motivo||''}\r\nORGANIZER:MAILTO:eugenia@notreal.tv\r\nSTATUS:CONFIRMED\r\nEND:VEVENT\r\n`;
+    }else{
+      const ds=r.desde.replace(/-/g,'');
+      const de=new Date(r.hasta);de.setDate(de.getDate()+1);
+      const deStr=de.toISOString().split('T')[0].replace(/-/g,'');
+      ics+=`BEGIN:VEVENT\r\nUID:aus_${r.id}@notreal.tv\r\nSUMMARY:${TIPO_ICON[r.tipo]} ${r.userName} — ${TIPO_LABEL[r.tipo]||r.tipo}\r\nDTSTART;VALUE=DATE:${ds}\r\nDTEND;VALUE=DATE:${deStr}\r\nDESCRIPTION:${r.motivo||''}\r\nORGANIZER:MAILTO:eugenia@notreal.tv\r\nSTATUS:CONFIRMED\r\nEND:VEVENT\r\n`;
+    }
+  });
+  ics+='END:VCALENDAR';
+  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ausencias_notreal.ics';a.click();
+  toast('✓ Archivo .ics descargado — importalo en Google Calendar');
+}
+
+buildDropdownItems();
+</script>
+</body>
+</html>
